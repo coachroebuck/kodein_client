@@ -5,26 +5,22 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_main.*
-import org.kodein.di.KodeinAware
+import org.kodein.di.*
 import org.kodein.di.android.closestKodein
-import org.kodein.di.generic.instance
+import org.kodein.di.android.retainedKodein
+import org.kodein.di.generic.factory
+import org.kodein.di.generic.kcontext
 import java.util.*
 
-class MainActivity : AppCompatActivity(), KodeinAware {
+class MainActivity : AppCompatActivity() {
 
-    override val kodein by closestKodein()
-
-    private lateinit var exampleDomain: KodeinDomain
+    private lateinit var domain: KodeinDomain
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        KodeinApplication.configure(intent?.getStringExtra("environment") ?: "home")
-        exampleDomain = retrieveDomain()
-        textView.text = String.format(Locale.getDefault(),
-            getString(R.string.current_environment,
-                exampleDomain.text))
+        configure((intent?.getStringExtra("environment") ?: "home"))
         button.setOnClickListener { launchNextActivity() }
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -32,19 +28,23 @@ class MainActivity : AppCompatActivity(), KodeinAware {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val env = parent?.getItemAtPosition(position).toString()
-                KodeinApplication.configure(env)
-                exampleDomain = retrieveDomain()
-                textView.text = String.format(Locale.getDefault(),
-                    getString(R.string.current_environment,
-                        exampleDomain.text))
+                updateDomainText(env = parent?.getItemAtPosition(position).toString())
             }
         }
     }
 
-    private fun retrieveDomain(): KodeinDomain {
-        val exampleDomain: KodeinDomain by instance()
-        return exampleDomain
+    private fun configure(env: String) {
+        updateDomainText(env)
+    }
+
+    private fun updateDomainText(env: String) {
+        val kodein by closestKodein(this)
+        val domainFactory: (String) -> KodeinDomain by kodein.factory()
+
+        domain = domainFactory(env)
+        textView.text = String.format(Locale.getDefault(),
+            getString(R.string.current_environment,
+                domain.text))
     }
 
     private fun launchNextActivity() {
