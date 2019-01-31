@@ -1,20 +1,31 @@
 package com.ancestry.kodeinapplication
 
 import android.app.Application
-import org.kodein.di.Kodein
+import com.ancestry.kodeinapplication.kodein.conf.ConfigurableKodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.bind
-import org.kodein.di.generic.singleton
+import org.kodein.di.generic.provider
 
 
 class KodeinApplication: Application(), KodeinAware {
 
-    override val kodein = Kodein {
-        bind<KodeinDomain>(tag = "home") with singleton { KodeinDomain("home") }
-        bind<KodeinDomain>(tag = "remote") with singleton { KodeinDomain("remote") }
-        bind<KodeinDomain>(tag = "ngrok") with singleton { KodeinDomain("ngrok") }
-        bind<KodeinDomain>(tag = "stage") with singleton { KodeinDomain("stage") }
-        bind<KodeinDomain>(tag = "live") with singleton { KodeinDomain("live") }
+    companion object {
+        var kodein: ConfigurableKodein? = null
+
+        fun configure(env: String) {
+            kodein?.clear()
+
+            kodein?.addConfig {
+                bind<KodeinDomain>() with provider { KodeinDomain(env) }
+            }
+        }
+    }
+    override val kodein : ConfigurableKodein = ConfigurableKodein(true)
+
+    override fun onCreate() {
+        super.onCreate()
+
+        KodeinApplication.kodein = kodein
     }
 
 }
