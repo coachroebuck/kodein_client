@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Kodein Application</string>
     <string name="select_environment">Select Environment</string>
+    <string name="click_me">Click Me!</string>
+    <string name="current_environment">Current Environment: %s</string>
     <string-array name="environments">
         <item>home</item>
         <item>remote</item>

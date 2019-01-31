@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
     private var domain = "home"
     private val exampleDomain: KodeinDomain by instance(tag = domain)
-//    val controller by kodein.newInstance { MainController(instance(), instance(tag = "whatever")) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
