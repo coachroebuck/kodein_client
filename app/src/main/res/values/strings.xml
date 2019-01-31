@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Kodein Application</string>
+    <string name="select_environment">Select Environment</string>
+    <string-array name="environments">
+        <item>home</item>
+        <item>remote</item>
+        <item>nrgok</item>
+        <item>stage</item>
+        <item>live</item>
+    </string-array>
+</resources>
