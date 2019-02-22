@@ -10,6 +10,8 @@ import org.kodein.di.generic.factory
 class KodeinApplication: Application(), KodeinAware {
 
     override val kodein = Kodein.lazy {
-        bind() from factory { name: String -> KodeinDomain(name) }
+        bind() from factory { name: String ->
+            KodeinDomain(name)
+        }
     }
 }

@@ -6,7 +6,7 @@
     <string-array name="environments">
         <item>home</item>
         <item>remote</item>
-        <item>nrgok</item>
+        <item>ngrok</item>
         <item>stage</item>
         <item>live</item>
     </string-array>

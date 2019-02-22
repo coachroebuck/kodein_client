@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_main.*
-import org.kodein.di.*
 import org.kodein.di.android.closestKodein
-import org.kodein.di.android.retainedKodein
 import org.kodein.di.generic.factory
-import org.kodein.di.generic.kcontext
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +28,7 @@ class MainActivity : AppCompatActivity() {
                 updateDomainText(env = parent?.getItemAtPosition(position).toString())
             }
         }
+        spinner.setSelection(intent?.getIntExtra("selectedIndex", 0) ?: 0)
     }
 
     private fun configure(env: String) {
